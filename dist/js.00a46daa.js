@@ -14104,19 +14104,135 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }]
   });
 });
-},{"jquery":"../node_modules/jquery/dist/jquery.js","slick-carousel":"../node_modules/slick-carousel/slick/slick.js"}],"js/modules/forms.js":[function(require,module,exports) {
-var dataCalc = {
-  balconShape: null,
-  windowWidth: null,
-  windowHeight: null,
-  windowMaterial: null,
-  windowTemperatureType: null
+},{"jquery":"../node_modules/jquery/dist/jquery.js","slick-carousel":"../node_modules/slick-carousel/slick/slick.js"}],"js/modules/formsData.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var formsData = {
+  dataCalc: {
+    balconShape: null,
+    windowWidth: null,
+    windowHeight: null,
+    windowMaterial: null,
+    windowTemperatureType: null
+  },
+  dataPerson: {
+    personName: null,
+    personTelephoneNumber: null
+  }
 };
-var dataPerson = {
-  personName: null,
-  personTelephoneNumber: null
-};
-},{}],"js/modules/popups.js":[function(require,module,exports) {
+var _default = exports.default = formsData;
+},{}],"js/modules/calcValidation.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _formsData = _interopRequireDefault(require("./formsData"));
+var _forms = _interopRequireDefault(require("./forms"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function messageStatusForm(colorMessage, message) {
+  var messageHtml = "<p style = \"color = ".concat(colorMessage, "\">").concat(message, "</p>");
+  console.log(message);
+}
+function validationPopupCalc(balconIconsInCalc, inputs) {
+  var _balconIconsInCalc$fi;
+  _formsData.default.dataCalc.balconShape = (_balconIconsInCalc$fi = balconIconsInCalc.find(function (element) {
+    return element.classList.contains("do_image_more");
+  })) === null || _balconIconsInCalc$fi === void 0 ? void 0 : _balconIconsInCalc$fi.children[0].alt;
+  inputs.forEach(function (input) {
+    if (input.id === "width" || input.id === "height") {
+      input.id === "width" ? _formsData.default.dataCalc.windowWidth = input.value : _formsData.default.dataCalc.windowHeight = input.value;
+    }
+  });
+  if (!_formsData.default.dataCalc.balconShape || !_formsData.default.dataCalc.windowWidth || !_formsData.default.dataCalc.windowHeight) {
+    messageStatusForm("red", "Заполните все поля формы");
+    return false;
+  }
+  return true;
+}
+function validationPopupCalcProfile(selectWindowMaterial, checkboxs) {
+  var _checkboxs$find;
+  _formsData.default.dataCalc.windowMaterial = selectWindowMaterial.value;
+  _formsData.default.dataCalc.windowTemperatureType = (_checkboxs$find = checkboxs.find(function (checkbox) {
+    return checkbox.checked;
+  })) === null || _checkboxs$find === void 0 ? void 0 : _checkboxs$find.nextElementSibling.id;
+  if (!_formsData.default.dataCalc.windowTemperatureType) {
+    messageStatusForm("red", "Заполните все поля формы");
+    return false;
+  }
+  return true;
+}
+function calcValidation(popup, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs) {
+  if (popup.popupToggleBtn === ".popup_calc_button") {
+    return validationPopupCalc(balconIconsInCalc, inputs);
+  }
+  if (popup.popupToggleBtn === ".popup_calc_profile_button") {
+    return validationPopupCalcProfile(selectWindowMaterial, checkboxs);
+  }
+}
+var _default = exports.default = calcValidation;
+},{"./formsData":"js/modules/formsData.js","./forms":"js/modules/forms.js"}],"js/modules/forms.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.activeOnlyOneCheckbox = activeOnlyOneCheckbox;
+exports.balconIconsInCalc = void 0;
+exports.calcValidationForm = calcValidationForm;
+exports.checkboxs = void 0;
+exports.switchSlideInCalc = switchSlideInCalc;
+var _formsData = _interopRequireDefault(require("./formsData"));
+var _calcValidation = _interopRequireDefault(require("./calcValidation"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+var balconIconsInCalc = exports.balconIconsInCalc = _toConsumableArray(document.querySelectorAll(".balcon_icons_img"));
+var balconBigImgInCalc = _toConsumableArray(document.querySelector(".big_img").querySelectorAll("img"));
+var inputs = [document.querySelector("#width"), document.querySelector("#height")].concat(_toConsumableArray(document.querySelectorAll("input[name='user_phone']")));
+var checkboxs = exports.checkboxs = _toConsumableArray(document.querySelectorAll(".popup_calc_profile .checkbox"));
+var selectWindowMaterial = document.querySelector('select[name = "view"]');
+
+//only numbers for phone and calc
+inputs.forEach(function (input) {
+  return input.addEventListener("input", function (event) {
+    event.target.value = event.target.value.replace(/\D/g, "");
+  });
+});
+function switchSlideInCalc(img) {
+  balconIconsInCalc.forEach(function (element) {
+    return element.classList.remove("do_image_more");
+  });
+  img.parentElement.classList.add("do_image_more");
+  balconBigImgInCalc.forEach(function (img) {
+    return img.style.display = "none";
+  });
+  balconBigImgInCalc.find(function (img) {
+    return img.alt === balconIconsInCalc.find(function (element) {
+      return element.classList.contains("do_image_more");
+    }).children[0].alt;
+  }).style.display = "block";
+}
+function activeOnlyOneCheckbox(checkbox) {
+  if (checkbox.checked) {
+    checkboxs.find(function (checkboxInContainer) {
+      return checkboxInContainer != checkbox;
+    }).checked = false;
+  }
+}
+function calcValidationForm(popup) {
+  return (0, _calcValidation.default)(popup, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs);
+}
+},{"./formsData":"js/modules/formsData.js","./calcValidation":"js/modules/calcValidation.js"}],"js/modules/popups.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14143,11 +14259,12 @@ var currentOpenPopup = exports.currentOpenPopup = null;
 var Popup = /*#__PURE__*/function () {
   function Popup(popupSelectot, popupShowBtnSelector, popupCloseBtnSelector) {
     var _this$popupWindow$que, _this$popupWindow$que2;
-    var additionalPopupCloseBtnSelector = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    var popupToggleBtn = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
     _classCallCheck(this, Popup);
     this.popupWindow = document.querySelector(popupSelectot);
     this.popupShowBtns = _toConsumableArray(document.querySelectorAll(popupShowBtnSelector));
-    additionalPopupCloseBtnSelector ? this.popupCloseBtns = [(_this$popupWindow$que = this.popupWindow.querySelector(popupCloseBtnSelector)) === null || _this$popupWindow$que === void 0 ? void 0 : _this$popupWindow$que.children[0], this.popupWindow, this.popupWindow.querySelector(additionalPopupCloseBtnSelector)] : this.popupCloseBtns = [(_this$popupWindow$que2 = this.popupWindow.querySelector(popupCloseBtnSelector)) === null || _this$popupWindow$que2 === void 0 ? void 0 : _this$popupWindow$que2.children[0], this.popupWindow];
+    popupToggleBtn ? this.popupCloseBtns = [(_this$popupWindow$que = this.popupWindow.querySelector(popupCloseBtnSelector)) === null || _this$popupWindow$que === void 0 ? void 0 : _this$popupWindow$que.children[0], this.popupWindow, this.popupWindow.querySelector(popupToggleBtn)] : this.popupCloseBtns = [(_this$popupWindow$que2 = this.popupWindow.querySelector(popupCloseBtnSelector)) === null || _this$popupWindow$que2 === void 0 ? void 0 : _this$popupWindow$que2.children[0], this.popupWindow];
+    this.popupToggleBtn = popupToggleBtn;
   }
   _createClass(Popup, [{
     key: "openPopup",
@@ -14185,58 +14302,47 @@ function findPopupOnCloseBtn(btn) {
     return popup.popupCloseBtns.includes(btn);
   });
 }
-
-// const popupEngineer = {
-//     popupWindow: document.querySelector(".popup_engineer"),
-//     popupShowBtns: [document.querySelector(".popup_engineer_btn")],
-//   };
-//   const popupCall = {
-//     popupWindow: document.querySelector(".popup"),
-//     popupShowBtns: [...document.querySelectorAll(".phone_link")],
-//   };
-//   const popupCalc = {
-//     popupWindow: document.querySelector(".popup_calc"),
-//     popupShowBtns: [...document.querySelectorAll(".popup_calc_btn")],
-//   };
-//   const popupCalcProfile = {
-//     popupWindow: document.querySelector(".popup_calc_profile"),
-//     popupShowBtns: [document.querySelector(".popup_calc_button")],
-//   };
-//   const popupCalcEnd = {
-//     popupWindow: document.querySelector(".popup_calc_end"),
-//     popupShowBtns: [document.querySelector(".popup_calc_profile_button")],
-//   };
-//   const popups = [
-//     popupEngineer,
-//     popupCall,
-//     popupCalc,
-//     popupCalcProfile,
-//     popupCalcEnd,
-//   ];
-//   const popupCloseBtns = [
-//     ...document.querySelectorAll(
-//       ".popup_close, .popup_calc_close, .popup_calc_profile_close, .popup_calc_end_close"
-//     ),
-//   ];
 },{"./forms":"js/modules/forms.js"}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 require("./slider");
 var _popups = require("./modules/popups");
+var _forms = require("./modules/forms");
 "use strict";
+//------------------------перенести-----------------------------
+
 console.log(_popups.popupsContainer);
 var body = document.querySelector("body");
 body.addEventListener("click", function (event) {
   if ((0, _popups.findPopupOnCloseBtn)(event.target)) {
+    if (event.target.classList.contains(_popups.currentOpenPopup.popupToggleBtn.slice(1, _popups.currentOpenPopup.popupToggleBtn.lengs))) {
+      if (!(0, _forms.calcValidationForm)(_popups.currentOpenPopup)) {
+        return;
+      }
+    }
     _popups.currentOpenPopup.closePopup();
   }
   if ((0, _popups.findPopupOnOpenBtn)(event.target)) {
     _popups.currentOpenPopup.openPopup();
     return;
   }
+  if (_forms.balconIconsInCalc.includes(event.target.parentElement)) {
+    (0, _forms.switchSlideInCalc)(event.target);
+    return;
+  }
+  if (_forms.checkboxs.includes(event.target)) {
+    (0, _forms.activeOnlyOneCheckbox)(event.target);
+    return;
+  }
+  if (null) {}
   return;
 });
-},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var _default = exports.default = body;
+},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -14261,7 +14367,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60001" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61461" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

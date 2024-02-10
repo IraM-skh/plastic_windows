@@ -5,20 +5,21 @@ class Popup {
     popupSelectot,
     popupShowBtnSelector,
     popupCloseBtnSelector,
-    additionalPopupCloseBtnSelector = null
+    popupToggleBtn = null
   ) {
     this.popupWindow = document.querySelector(popupSelectot);
     this.popupShowBtns = [...document.querySelectorAll(popupShowBtnSelector)];
-    additionalPopupCloseBtnSelector
+    popupToggleBtn
       ? (this.popupCloseBtns = [
           this.popupWindow.querySelector(popupCloseBtnSelector)?.children[0],
           this.popupWindow,
-          this.popupWindow.querySelector(additionalPopupCloseBtnSelector),
+          this.popupWindow.querySelector(popupToggleBtn),
         ])
       : (this.popupCloseBtns = [
           this.popupWindow.querySelector(popupCloseBtnSelector)?.children[0],
           this.popupWindow,
         ]);
+    this.popupToggleBtn = popupToggleBtn;
   }
 
   openPopup() {
@@ -82,35 +83,3 @@ export {
   findPopupOnCloseBtn,
   currentOpenPopup,
 };
-// const popupEngineer = {
-//     popupWindow: document.querySelector(".popup_engineer"),
-//     popupShowBtns: [document.querySelector(".popup_engineer_btn")],
-//   };
-//   const popupCall = {
-//     popupWindow: document.querySelector(".popup"),
-//     popupShowBtns: [...document.querySelectorAll(".phone_link")],
-//   };
-//   const popupCalc = {
-//     popupWindow: document.querySelector(".popup_calc"),
-//     popupShowBtns: [...document.querySelectorAll(".popup_calc_btn")],
-//   };
-//   const popupCalcProfile = {
-//     popupWindow: document.querySelector(".popup_calc_profile"),
-//     popupShowBtns: [document.querySelector(".popup_calc_button")],
-//   };
-//   const popupCalcEnd = {
-//     popupWindow: document.querySelector(".popup_calc_end"),
-//     popupShowBtns: [document.querySelector(".popup_calc_profile_button")],
-//   };
-//   const popups = [
-//     popupEngineer,
-//     popupCall,
-//     popupCalc,
-//     popupCalcProfile,
-//     popupCalcEnd,
-//   ];
-//   const popupCloseBtns = [
-//     ...document.querySelectorAll(
-//       ".popup_close, .popup_calc_close, .popup_calc_profile_close, .popup_calc_end_close"
-//     ),
-//   ];
