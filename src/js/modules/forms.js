@@ -45,9 +45,10 @@ function activeOnlyOneCheckbox(checkbox) {
   }
 }
 
-function calcValidationForm(popup) {
+function calcValidationForm(popup, glazingSliderLinks) {
   return calcValidation(
     popup,
+    glazingSliderLinks,
     selectWindowMaterial,
     balconIconsInCalc,
     inputs,

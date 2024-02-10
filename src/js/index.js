@@ -23,9 +23,7 @@ import {
   decorationSliderLinks,
   chengeDecorationSlide,
 } from "./modules/decorationSlider";
-//------------------------перенести-----------------------------
 
-console.log(popupsContainer);
 const body = document.querySelector("body");
 body.addEventListener("click", (event) => {
   if (findPopupOnCloseBtn(event.target)) {
@@ -37,7 +35,7 @@ body.addEventListener("click", (event) => {
         )
       )
     ) {
-      if (!calcValidationForm(currentOpenPopup)) {
+      if (!calcValidationForm(currentOpenPopup, glazingSliderLinks)) {
         return;
       }
     }

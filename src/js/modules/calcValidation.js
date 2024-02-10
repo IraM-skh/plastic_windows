@@ -6,7 +6,19 @@ function messageStatusForm(colorMessage, message) {
   console.log(message);
 }
 
-function validationPopupCalc(balconIconsInCalc, inputs) {
+function validationPopupCalc(
+  balconIconsInCalc,
+  inputs,
+  selectWindowMaterial,
+  glazingSliderLinks
+) {
+  const glazingSliderLinkName = glazingSliderLinks
+    .find((link) => link.classList.contains("active"))
+    .classList[0].slice(0, -5);
+  glazingSliderLinkName === "rise"
+    ? (selectWindowMaterial.value = "overhang")
+    : (selectWindowMaterial.value = glazingSliderLinkName);
+
   formsData.dataCalc.balconShape = balconIconsInCalc.find((element) =>
     element.classList.contains("do_image_more")
   )?.children[0].alt;
@@ -42,13 +54,19 @@ function validationPopupCalcProfile(selectWindowMaterial, checkboxs) {
 
 function calcValidation(
   popup,
+  glazingSliderLinks,
   selectWindowMaterial,
   balconIconsInCalc,
   inputs,
   checkboxs
 ) {
   if (popup.popupToggleBtn === ".popup_calc_button") {
-    return validationPopupCalc(balconIconsInCalc, inputs);
+    return validationPopupCalc(
+      balconIconsInCalc,
+      inputs,
+      selectWindowMaterial,
+      glazingSliderLinks
+    );
   }
 
   if (popup.popupToggleBtn === ".popup_calc_profile_button") {

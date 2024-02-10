@@ -14139,8 +14139,15 @@ function messageStatusForm(colorMessage, message) {
   var messageHtml = "<p style = \"color = ".concat(colorMessage, "\">").concat(message, "</p>");
   console.log(message);
 }
-function validationPopupCalc(balconIconsInCalc, inputs) {
+function validationPopupCalc(balconIconsInCalc, inputs, selectWindowMaterial, glazingSliderLinks) {
   var _balconIconsInCalc$fi;
+  console.log(glazingSliderLinks.find(function (link) {
+    return link.classList.contains("active");
+  }));
+  var glazingSliderLinkName = glazingSliderLinks.find(function (link) {
+    return link.classList.contains("active");
+  }).classList[0].slice(0, -5);
+  glazingSliderLinkName === "rise" ? selectWindowMaterial.value = "overhang" : selectWindowMaterial.value = glazingSliderLinkName;
   _formsData.default.dataCalc.balconShape = (_balconIconsInCalc$fi = balconIconsInCalc.find(function (element) {
     return element.classList.contains("do_image_more");
   })) === null || _balconIconsInCalc$fi === void 0 ? void 0 : _balconIconsInCalc$fi.children[0].alt;
@@ -14167,9 +14174,9 @@ function validationPopupCalcProfile(selectWindowMaterial, checkboxs) {
   }
   return true;
 }
-function calcValidation(popup, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs) {
+function calcValidation(popup, glazingSliderLinks, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs) {
   if (popup.popupToggleBtn === ".popup_calc_button") {
-    return validationPopupCalc(balconIconsInCalc, inputs);
+    return validationPopupCalc(balconIconsInCalc, inputs, selectWindowMaterial, glazingSliderLinks);
   }
   if (popup.popupToggleBtn === ".popup_calc_profile_button") {
     return validationPopupCalcProfile(selectWindowMaterial, checkboxs);
@@ -14201,7 +14208,7 @@ var balconBigImgInCalc = _toConsumableArray(document.querySelector(".big_img").q
 var inputs = [document.querySelector("#width"), document.querySelector("#height")].concat(_toConsumableArray(document.querySelectorAll("input[name='user_phone']")));
 var checkboxs = exports.checkboxs = _toConsumableArray(document.querySelectorAll(".popup_calc_profile .checkbox"));
 var selectWindowMaterial = document.querySelector('select[name = "view"]');
-
+console.log(selectWindowMaterial);
 //only numbers for phone and calc
 inputs.forEach(function (input) {
   return input.addEventListener("input", function (event) {
@@ -14229,8 +14236,9 @@ function activeOnlyOneCheckbox(checkbox) {
     }).checked = false;
   }
 }
-function calcValidationForm(popup) {
-  return (0, _calcValidation.default)(popup, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs);
+function calcValidationForm(popup, glazingSliderLinks) {
+  console.log(selectWindowMaterial);
+  return (0, _calcValidation.default)(popup, glazingSliderLinks, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs);
 }
 },{"./formsData":"js/modules/formsData.js","./calcValidation":"js/modules/calcValidation.js"}],"js/modules/popups.js":[function(require,module,exports) {
 "use strict";
@@ -14407,7 +14415,7 @@ var body = document.querySelector("body");
 body.addEventListener("click", function (event) {
   if ((0, _popups.findPopupOnCloseBtn)(event.target)) {
     if (event.target.classList.contains(_popups.currentOpenPopup.popupToggleBtn.slice(1, _popups.currentOpenPopup.popupToggleBtn.lengs))) {
-      if (!(0, _forms.calcValidationForm)(_popups.currentOpenPopup)) {
+      if (!(0, _forms.calcValidationForm)(_popups.currentOpenPopup, _glazingSlider.glazingSliderLinks)) {
         return;
       }
     }
@@ -14461,7 +14469,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58414" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59575" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
