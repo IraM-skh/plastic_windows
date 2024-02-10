@@ -14,6 +14,15 @@ import {
   calcValidationForm,
 } from "./modules/forms";
 
+import {
+  chengeGlazingSlide,
+  glazingSliderLinks,
+} from "./modules/glazingSlider";
+
+import {
+  decorationSliderLinks,
+  chengeDecorationSlide,
+} from "./modules/decorationSlider";
 //------------------------перенести-----------------------------
 
 console.log(popupsContainer);
@@ -46,7 +55,13 @@ body.addEventListener("click", (event) => {
     activeOnlyOneCheckbox(event.target);
     return;
   }
-  if (null) {
+  if (glazingSliderLinks.includes(event.target)) {
+    chengeGlazingSlide(event.target);
+    return;
+  }
+  if (decorationSliderLinks.includes(event.target)) {
+    chengeDecorationSlide(event.target);
+    return;
   }
   return;
 });

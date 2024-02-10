@@ -14302,7 +14302,92 @@ function findPopupOnCloseBtn(btn) {
     return popup.popupCloseBtns.includes(btn);
   });
 }
-},{"./forms":"js/modules/forms.js"}],"js/index.js":[function(require,module,exports) {
+},{"./forms":"js/modules/forms.js"}],"js/modules/sliders.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getLinkSellectorsSlider = getLinkSellectorsSlider;
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function getLinkSellectorsSlider(selectorString) {
+  return _toConsumableArray(document.querySelector(selectorString).querySelectorAll("a"));
+}
+},{}],"js/modules/glazingSlider.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.chengeGlazingSlide = chengeGlazingSlide;
+exports.glazingSliderLinks = void 0;
+var _sliders = require("./sliders");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+var glazingSliderLinks = exports.glazingSliderLinks = (0, _sliders.getLinkSellectorsSlider)(".glazing_slider");
+var glazingSlides = _toConsumableArray(document.querySelectorAll(".glazing_content"));
+glazingSliderLinks.find(function (link) {
+  return link.classList.contains("tree_link");
+}).classList.add("active");
+function chengeGlazingSlide(link) {
+  glazingSliderLinks.forEach(function (link) {
+    return link.classList.remove("active");
+  });
+  // change slide
+  glazingSlides.forEach(function (slide) {
+    slide.style.display = "none";
+    if (slide.classList.contains(link.classList.value.slice(0, -5))) {
+      slide.style.display = "block";
+    }
+  });
+  //show active link
+  link.classList.add("active");
+}
+},{"./sliders":"js/modules/sliders.js"}],"js/modules/decorationSlider.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.chengeDecorationSlide = chengeDecorationSlide;
+exports.decorationSliderLinks = void 0;
+var _sliders = require("./sliders");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+var decorationSliderLinks = exports.decorationSliderLinks = (0, _sliders.getLinkSellectorsSlider)(".decoration_slider");
+var decorationSlides = decorationSliderLinks.map(function (link) {
+  var decorationSlidesClassName = _toConsumableArray(link.parentElement.classList).find(function (el) {
+    return el.slice(-5) === "_link";
+  }).slice(0, -5);
+  return document.querySelector(".".concat(decorationSlidesClassName));
+});
+function chengeDecorationSlide(link) {
+  var clickedLinkIndex = decorationSliderLinks.indexOf(link);
+  decorationSliderLinks.forEach(function (link) {
+    return link.parentElement.classList.remove("after_click");
+  });
+  link.parentElement.classList.add("after_click");
+  decorationSlides.forEach(function (slide, index) {
+    slide.style.display = "none";
+    if (index === clickedLinkIndex) {
+      slide.style.display = "block";
+    }
+  });
+}
+},{"./sliders":"js/modules/sliders.js"}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14312,6 +14397,8 @@ exports.default = void 0;
 require("./slider");
 var _popups = require("./modules/popups");
 var _forms = require("./modules/forms");
+var _glazingSlider = require("./modules/glazingSlider");
+var _decorationSlider = require("./modules/decorationSlider");
 "use strict";
 //------------------------перенести-----------------------------
 
@@ -14338,11 +14425,18 @@ body.addEventListener("click", function (event) {
     (0, _forms.activeOnlyOneCheckbox)(event.target);
     return;
   }
-  if (null) {}
+  if (_glazingSlider.glazingSliderLinks.includes(event.target)) {
+    (0, _glazingSlider.chengeGlazingSlide)(event.target);
+    return;
+  }
+  if (_decorationSlider.decorationSliderLinks.includes(event.target)) {
+    (0, _decorationSlider.chengeDecorationSlide)(event.target);
+    return;
+  }
   return;
 });
 var _default = exports.default = body;
-},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js","./modules/glazingSlider":"js/modules/glazingSlider.js","./modules/decorationSlider":"js/modules/decorationSlider.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -14367,7 +14461,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61461" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58414" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
