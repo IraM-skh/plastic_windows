@@ -14141,9 +14141,6 @@ function messageStatusForm(colorMessage, message) {
 }
 function validationPopupCalc(balconIconsInCalc, inputs, selectWindowMaterial, glazingSliderLinks) {
   var _balconIconsInCalc$fi;
-  console.log(glazingSliderLinks.find(function (link) {
-    return link.classList.contains("active");
-  }));
   var glazingSliderLinkName = glazingSliderLinks.find(function (link) {
     return link.classList.contains("active");
   }).classList[0].slice(0, -5);
@@ -14208,7 +14205,7 @@ var balconBigImgInCalc = _toConsumableArray(document.querySelector(".big_img").q
 var inputs = [document.querySelector("#width"), document.querySelector("#height")].concat(_toConsumableArray(document.querySelectorAll("input[name='user_phone']")));
 var checkboxs = exports.checkboxs = _toConsumableArray(document.querySelectorAll(".popup_calc_profile .checkbox"));
 var selectWindowMaterial = document.querySelector('select[name = "view"]');
-console.log(selectWindowMaterial);
+
 //only numbers for phone and calc
 inputs.forEach(function (input) {
   return input.addEventListener("input", function (event) {
@@ -14237,7 +14234,6 @@ function activeOnlyOneCheckbox(checkbox) {
   }
 }
 function calcValidationForm(popup, glazingSliderLinks) {
-  console.log(selectWindowMaterial);
   return (0, _calcValidation.default)(popup, glazingSliderLinks, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs);
 }
 },{"./formsData":"js/modules/formsData.js","./calcValidation":"js/modules/calcValidation.js"}],"js/modules/popups.js":[function(require,module,exports) {
@@ -14249,6 +14245,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.currentOpenPopup = void 0;
 exports.findPopupOnCloseBtn = findPopupOnCloseBtn;
 exports.findPopupOnOpenBtn = findPopupOnOpenBtn;
+exports.openPopupCallForTimer = openPopupCallForTimer;
 exports.popupsContainer = void 0;
 require("./forms");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -14304,6 +14301,12 @@ function findPopupOnOpenBtn(btn) {
     exports.currentOpenPopup = currentOpenPopup = openedPopup;
   }
   return openedPopup;
+}
+function openPopupCallForTimer() {
+  exports.currentOpenPopup = currentOpenPopup = popupsContainer.find(function (popup) {
+    return popup.popupWindow.classList.contains("popup");
+  });
+  currentOpenPopup.openPopup();
 }
 function findPopupOnCloseBtn(btn) {
   return popupsContainer.find(function (popup) {
@@ -14395,7 +14398,66 @@ function chengeDecorationSlide(link) {
     }
   });
 }
-},{"./sliders":"js/modules/sliders.js"}],"js/index.js":[function(require,module,exports) {
+},{"./sliders":"js/modules/sliders.js"}],"js/modules/saleTimer.js":[function(require,module,exports) {
+"use strict";
+
+var _popups = require("./popups");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+var timer60sec = 0;
+var endDateOfSale = "2024-02-13T21:32:00.000Z";
+var _map = _toConsumableArray(document.querySelectorAll(".numbers1")).map(function (numbersContainer) {
+    return numbersContainer.querySelector("span");
+  }),
+  _map2 = _slicedToArray(_map, 4),
+  timerNumbersDays = _map2[0],
+  timerNumbersHours = _map2[1],
+  timerNumbersMinutes = _map2[2],
+  timerNumbersSeconds = _map2[3];
+function twoDigitMode(time) {
+  return ("0" + time).slice(-2);
+}
+function getTimeRemaining(endTimeStr) {
+  var total = Date.parse(endTimeStr) - Date.parse(new Date()) + new Date().getTimezoneOffset() * 60 * 1000;
+  var seconds = Math.floor(total / 1000 % 60);
+  var minutes = Math.floor(total / 1000 / 60 % 60);
+  var hours = Math.floor(total / (1000 * 60 * 60) % 24);
+  var days = Math.floor(total / (1000 * 60 * 60 * 24));
+  return {
+    total: total,
+    days: days,
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds
+  };
+}
+var saleTimer = setInterval(function () {
+  var timeData = getTimeRemaining(endDateOfSale);
+  timerNumbersDays.textContent = twoDigitMode(timeData.days);
+  timerNumbersHours.textContent = twoDigitMode(timeData.hours);
+  timerNumbersMinutes.textContent = twoDigitMode(timeData.minutes);
+  timerNumbersSeconds.textContent = twoDigitMode(timeData.seconds);
+  if (timeData.total === 0) {
+    clearInterval(saleTimer);
+  }
+  //for open popup after 60s
+  if (timer60sec <= 60) {
+    if (timer60sec === 60 && !_popups.currentOpenPopup) {
+      (0, _popups.openPopupCallForTimer)();
+      return;
+    }
+    timer60sec += 1;
+  }
+}, 1000);
+},{"./popups":"js/modules/popups.js"}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14407,14 +14469,13 @@ var _popups = require("./modules/popups");
 var _forms = require("./modules/forms");
 var _glazingSlider = require("./modules/glazingSlider");
 var _decorationSlider = require("./modules/decorationSlider");
+require("./modules/saleTimer");
 "use strict";
-//------------------------перенести-----------------------------
-
-console.log(_popups.popupsContainer);
 var body = document.querySelector("body");
 body.addEventListener("click", function (event) {
   if ((0, _popups.findPopupOnCloseBtn)(event.target)) {
-    if (event.target.classList.contains(_popups.currentOpenPopup.popupToggleBtn.slice(1, _popups.currentOpenPopup.popupToggleBtn.lengs))) {
+    var _currentOpenPopup$pop;
+    if (event.target.classList.contains((_currentOpenPopup$pop = _popups.currentOpenPopup.popupToggleBtn) === null || _currentOpenPopup$pop === void 0 ? void 0 : _currentOpenPopup$pop.slice(1, _popups.currentOpenPopup.popupToggleBtn.lengs))) {
       if (!(0, _forms.calcValidationForm)(_popups.currentOpenPopup, _glazingSlider.glazingSliderLinks)) {
         return;
       }
@@ -14444,7 +14505,7 @@ body.addEventListener("click", function (event) {
   return;
 });
 var _default = exports.default = body;
-},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js","./modules/glazingSlider":"js/modules/glazingSlider.js","./modules/decorationSlider":"js/modules/decorationSlider.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js","./modules/glazingSlider":"js/modules/glazingSlider.js","./modules/decorationSlider":"js/modules/decorationSlider.js","./modules/saleTimer":"js/modules/saleTimer.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -14469,7 +14530,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59575" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52445" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

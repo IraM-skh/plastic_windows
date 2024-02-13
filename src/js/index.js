@@ -1,5 +1,6 @@
 ("use strict");
 import "./slider";
+
 import {
   popupsContainer,
   findPopupOnOpenBtn,
@@ -24,12 +25,13 @@ import {
   chengeDecorationSlide,
 } from "./modules/decorationSlider";
 
+import "./modules/saleTimer";
 const body = document.querySelector("body");
 body.addEventListener("click", (event) => {
   if (findPopupOnCloseBtn(event.target)) {
     if (
       event.target.classList.contains(
-        currentOpenPopup.popupToggleBtn.slice(
+        currentOpenPopup.popupToggleBtn?.slice(
           1,
           currentOpenPopup.popupToggleBtn.lengs
         )

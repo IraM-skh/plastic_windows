@@ -72,7 +72,12 @@ function findPopupOnOpenBtn(btn) {
   }
   return openedPopup;
 }
-
+function openPopupCallForTimer() {
+  currentOpenPopup = popupsContainer.find((popup) =>
+    popup.popupWindow.classList.contains("popup")
+  );
+  currentOpenPopup.openPopup();
+}
 function findPopupOnCloseBtn(btn) {
   return popupsContainer.find((popup) => popup.popupCloseBtns.includes(btn));
 }
@@ -82,4 +87,5 @@ export {
   findPopupOnOpenBtn,
   findPopupOnCloseBtn,
   currentOpenPopup,
+  openPopupCallForTimer,
 };
