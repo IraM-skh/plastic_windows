@@ -1,6 +1,6 @@
 import { currentOpenPopup, openPopupCallForTimer } from "./popups";
 let timer60sec = 0;
-let endDateOfSale = "2024-02-13T21:32:00.000Z";
+let endDateOfSale = "2024-02-14T01:00:00.000Z";
 const [
   timerNumbersDays,
   timerNumbersHours,
@@ -12,6 +12,7 @@ const [
 function twoDigitMode(time) {
   return ("0" + time).slice(-2);
 }
+
 function getTimeRemaining(endTimeStr) {
   let total =
     Date.parse(endTimeStr) -
@@ -29,12 +30,18 @@ function getTimeRemaining(endTimeStr) {
     seconds: seconds,
   };
 }
-const saleTimer = setInterval(() => {
+
+function setTimerIntoHTML() {
   const timeData = getTimeRemaining(endDateOfSale);
   timerNumbersDays.textContent = twoDigitMode(timeData.days);
   timerNumbersHours.textContent = twoDigitMode(timeData.hours);
   timerNumbersMinutes.textContent = twoDigitMode(timeData.minutes);
   timerNumbersSeconds.textContent = twoDigitMode(timeData.seconds);
+  return timeData;
+}
+setTimerIntoHTML();
+const saleTimer = setInterval(() => {
+  const timeData = setTimerIntoHTML();
 
   if (timeData.total === 0) {
     clearInterval(saleTimer);

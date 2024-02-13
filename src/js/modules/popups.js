@@ -19,7 +19,7 @@ class Popup {
           this.popupWindow.querySelector(popupCloseBtnSelector)?.children[0],
           this.popupWindow,
         ]);
-    this.popupToggleBtn = popupToggleBtn;
+    this.popupToggleBtn = document.querySelector(popupToggleBtn);
   }
 
   openPopup() {
@@ -28,6 +28,7 @@ class Popup {
 
   closePopup() {
     this.popupWindow.style.display = "none";
+    currentOpenPopup = null;
   }
   sendDataForm() {}
 }
@@ -78,8 +79,22 @@ function openPopupCallForTimer() {
   );
   currentOpenPopup.openPopup();
 }
+function addPortfolioPopup() {
+  currentOpenPopup = {
+    popupWindow: document.querySelector(".popup_portfolio"),
+    popupShowBtns: null,
+    popupCloseBtns: [document.querySelector(".popup_portfolio")],
+    popupToggleBtn: null,
+    closePopup() {
+      this.popupWindow.remove();
+      currentOpenPopup = null;
+    },
+  };
+}
+
 function findPopupOnCloseBtn(btn) {
-  return popupsContainer.find((popup) => popup.popupCloseBtns.includes(btn));
+  return currentOpenPopup?.popupCloseBtns.includes(btn);
+  // return popupsContainer.find((popup) => popup.popupCloseBtns.includes(btn))
 }
 
 export {
@@ -88,4 +103,5 @@ export {
   findPopupOnCloseBtn,
   currentOpenPopup,
   openPopupCallForTimer,
+  addPortfolioPopup,
 };

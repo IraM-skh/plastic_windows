@@ -24,19 +24,12 @@ import {
   decorationSliderLinks,
   chengeDecorationSlide,
 } from "./modules/decorationSlider";
-
+import { showPorfolioPopup, portfolioPreview } from "./modules/portfolio";
 import "./modules/saleTimer";
 const body = document.querySelector("body");
 body.addEventListener("click", (event) => {
   if (findPopupOnCloseBtn(event.target)) {
-    if (
-      event.target.classList.contains(
-        currentOpenPopup.popupToggleBtn?.slice(
-          1,
-          currentOpenPopup.popupToggleBtn.lengs
-        )
-      )
-    ) {
+    if (event.target === currentOpenPopup.popupToggleBtn) {
       if (!calcValidationForm(currentOpenPopup, glazingSliderLinks)) {
         return;
       }
@@ -44,6 +37,7 @@ body.addEventListener("click", (event) => {
     currentOpenPopup.closePopup();
   }
   if (findPopupOnOpenBtn(event.target)) {
+    event.preventDefault();
     currentOpenPopup.openPopup();
     return;
   }
@@ -61,6 +55,11 @@ body.addEventListener("click", (event) => {
   }
   if (decorationSliderLinks.includes(event.target)) {
     chengeDecorationSlide(event.target);
+    return;
+  }
+  if (portfolioPreview.includes(event.target)) {
+    event.preventDefault();
+    showPorfolioPopup(event.target);
     return;
   }
   return;

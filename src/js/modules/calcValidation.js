@@ -60,7 +60,7 @@ function calcValidation(
   inputs,
   checkboxs
 ) {
-  if (popup.popupToggleBtn === ".popup_calc_button") {
+  if (popup.popupToggleBtn.classList.contains("popup_calc_button")) {
     return validationPopupCalc(
       balconIconsInCalc,
       inputs,
@@ -69,7 +69,7 @@ function calcValidation(
     );
   }
 
-  if (popup.popupToggleBtn === ".popup_calc_profile_button") {
+  if (popup.popupToggleBtn.classList.contains("popup_calc_profile_button")) {
     return validationPopupCalcProfile(selectWindowMaterial, checkboxs);
   }
 }

@@ -14172,10 +14172,10 @@ function validationPopupCalcProfile(selectWindowMaterial, checkboxs) {
   return true;
 }
 function calcValidation(popup, glazingSliderLinks, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs) {
-  if (popup.popupToggleBtn === ".popup_calc_button") {
+  if (popup.popupToggleBtn.classList.contains("popup_calc_button")) {
     return validationPopupCalc(balconIconsInCalc, inputs, selectWindowMaterial, glazingSliderLinks);
   }
-  if (popup.popupToggleBtn === ".popup_calc_profile_button") {
+  if (popup.popupToggleBtn.classList.contains("popup_calc_profile_button")) {
     return validationPopupCalcProfile(selectWindowMaterial, checkboxs);
   }
 }
@@ -14242,6 +14242,7 @@ function calcValidationForm(popup, glazingSliderLinks) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.addPortfolioPopup = addPortfolioPopup;
 exports.currentOpenPopup = void 0;
 exports.findPopupOnCloseBtn = findPopupOnCloseBtn;
 exports.findPopupOnOpenBtn = findPopupOnOpenBtn;
@@ -14269,7 +14270,7 @@ var Popup = /*#__PURE__*/function () {
     this.popupWindow = document.querySelector(popupSelectot);
     this.popupShowBtns = _toConsumableArray(document.querySelectorAll(popupShowBtnSelector));
     popupToggleBtn ? this.popupCloseBtns = [(_this$popupWindow$que = this.popupWindow.querySelector(popupCloseBtnSelector)) === null || _this$popupWindow$que === void 0 ? void 0 : _this$popupWindow$que.children[0], this.popupWindow, this.popupWindow.querySelector(popupToggleBtn)] : this.popupCloseBtns = [(_this$popupWindow$que2 = this.popupWindow.querySelector(popupCloseBtnSelector)) === null || _this$popupWindow$que2 === void 0 ? void 0 : _this$popupWindow$que2.children[0], this.popupWindow];
-    this.popupToggleBtn = popupToggleBtn;
+    this.popupToggleBtn = document.querySelector(popupToggleBtn);
   }
   _createClass(Popup, [{
     key: "openPopup",
@@ -14280,6 +14281,7 @@ var Popup = /*#__PURE__*/function () {
     key: "closePopup",
     value: function closePopup() {
       this.popupWindow.style.display = "none";
+      exports.currentOpenPopup = currentOpenPopup = null;
     }
   }, {
     key: "sendDataForm",
@@ -14308,10 +14310,22 @@ function openPopupCallForTimer() {
   });
   currentOpenPopup.openPopup();
 }
+function addPortfolioPopup() {
+  exports.currentOpenPopup = currentOpenPopup = {
+    popupWindow: document.querySelector(".popup_portfolio"),
+    popupShowBtns: null,
+    popupCloseBtns: [document.querySelector(".popup_portfolio")],
+    popupToggleBtn: null,
+    closePopup: function closePopup() {
+      this.popupWindow.remove();
+      exports.currentOpenPopup = currentOpenPopup = null;
+    }
+  };
+}
 function findPopupOnCloseBtn(btn) {
-  return popupsContainer.find(function (popup) {
-    return popup.popupCloseBtns.includes(btn);
-  });
+  var _currentOpenPopup;
+  return (_currentOpenPopup = currentOpenPopup) === null || _currentOpenPopup === void 0 ? void 0 : _currentOpenPopup.popupCloseBtns.includes(btn);
+  // return popupsContainer.find((popup) => popup.popupCloseBtns.includes(btn))
 }
 },{"./forms":"js/modules/forms.js"}],"js/modules/sliders.js":[function(require,module,exports) {
 "use strict";
@@ -14398,7 +14412,32 @@ function chengeDecorationSlide(link) {
     }
   });
 }
-},{"./sliders":"js/modules/sliders.js"}],"js/modules/saleTimer.js":[function(require,module,exports) {
+},{"./sliders":"js/modules/sliders.js"}],"js/modules/portfolio.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.portfolioPreview = void 0;
+exports.showPorfolioPopup = showPorfolioPopup;
+var _popups = require("./popups");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+var portfoliolink = _toConsumableArray(document.querySelector(".works").querySelectorAll("a"));
+var portfolioPreview = exports.portfolioPreview = portfoliolink.map(function (link) {
+  return link.children[0];
+});
+function showPorfolioPopup(link) {
+  var srcBigImg = portfoliolink[portfolioPreview.indexOf(link)].href;
+  var htmlPopupPortfolio = "<div class=\"popup popup_portfolio\" style=\"display: block\"> <img class=\"portfolio_big_img\" src=\"".concat(srcBigImg, "\" alt=\"window\" style=\"position: absolute;top: 50%; left:50%; transform: translate(-50%, -50%); width:100%; max-width:fit-content;\"> </div>");
+  document.querySelector(".popup_calc_end").insertAdjacentHTML("afterend", htmlPopupPortfolio);
+  (0, _popups.addPortfolioPopup)();
+}
+},{"./popups":"js/modules/popups.js"}],"js/modules/saleTimer.js":[function(require,module,exports) {
 "use strict";
 
 var _popups = require("./popups");
@@ -14413,7 +14452,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var timer60sec = 0;
-var endDateOfSale = "2024-02-13T21:32:00.000Z";
+var endDateOfSale = "2024-02-14T01:00:00.000Z";
 var _map = _toConsumableArray(document.querySelectorAll(".numbers1")).map(function (numbersContainer) {
     return numbersContainer.querySelector("span");
   }),
@@ -14439,12 +14478,17 @@ function getTimeRemaining(endTimeStr) {
     seconds: seconds
   };
 }
-var saleTimer = setInterval(function () {
+function setTimerIntoHTML() {
   var timeData = getTimeRemaining(endDateOfSale);
   timerNumbersDays.textContent = twoDigitMode(timeData.days);
   timerNumbersHours.textContent = twoDigitMode(timeData.hours);
   timerNumbersMinutes.textContent = twoDigitMode(timeData.minutes);
   timerNumbersSeconds.textContent = twoDigitMode(timeData.seconds);
+  return timeData;
+}
+setTimerIntoHTML();
+var saleTimer = setInterval(function () {
+  var timeData = setTimerIntoHTML();
   if (timeData.total === 0) {
     clearInterval(saleTimer);
   }
@@ -14469,13 +14513,13 @@ var _popups = require("./modules/popups");
 var _forms = require("./modules/forms");
 var _glazingSlider = require("./modules/glazingSlider");
 var _decorationSlider = require("./modules/decorationSlider");
+var _portfolio = require("./modules/portfolio");
 require("./modules/saleTimer");
 "use strict";
 var body = document.querySelector("body");
 body.addEventListener("click", function (event) {
   if ((0, _popups.findPopupOnCloseBtn)(event.target)) {
-    var _currentOpenPopup$pop;
-    if (event.target.classList.contains((_currentOpenPopup$pop = _popups.currentOpenPopup.popupToggleBtn) === null || _currentOpenPopup$pop === void 0 ? void 0 : _currentOpenPopup$pop.slice(1, _popups.currentOpenPopup.popupToggleBtn.lengs))) {
+    if (event.target === _popups.currentOpenPopup.popupToggleBtn) {
       if (!(0, _forms.calcValidationForm)(_popups.currentOpenPopup, _glazingSlider.glazingSliderLinks)) {
         return;
       }
@@ -14483,6 +14527,7 @@ body.addEventListener("click", function (event) {
     _popups.currentOpenPopup.closePopup();
   }
   if ((0, _popups.findPopupOnOpenBtn)(event.target)) {
+    event.preventDefault();
     _popups.currentOpenPopup.openPopup();
     return;
   }
@@ -14502,10 +14547,15 @@ body.addEventListener("click", function (event) {
     (0, _decorationSlider.chengeDecorationSlide)(event.target);
     return;
   }
+  if (_portfolio.portfolioPreview.includes(event.target)) {
+    event.preventDefault();
+    (0, _portfolio.showPorfolioPopup)(event.target);
+    return;
+  }
   return;
 });
 var _default = exports.default = body;
-},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js","./modules/glazingSlider":"js/modules/glazingSlider.js","./modules/decorationSlider":"js/modules/decorationSlider.js","./modules/saleTimer":"js/modules/saleTimer.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js","./modules/glazingSlider":"js/modules/glazingSlider.js","./modules/decorationSlider":"js/modules/decorationSlider.js","./modules/portfolio":"js/modules/portfolio.js","./modules/saleTimer":"js/modules/saleTimer.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -14530,7 +14580,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52445" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58020" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
