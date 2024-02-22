@@ -1,4 +1,3 @@
-import formsData from "./formsData";
 import calcValidation from "./calcValidation";
 
 const balconIconsInCalc = [...document.querySelectorAll(".balcon_icons_img")];

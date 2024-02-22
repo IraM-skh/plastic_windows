@@ -26,7 +26,9 @@ import {
 } from "./modules/decorationSlider";
 import { showPorfolioPopup, portfolioPreview } from "./modules/portfolio";
 import "./modules/saleTimer";
+import submitForm from "./modules/submitForm";
 const body = document.querySelector("body");
+submitForm();
 body.addEventListener("click", (event) => {
   if (findPopupOnCloseBtn(event.target)) {
     if (event.target === currentOpenPopup.popupToggleBtn) {
@@ -62,6 +64,7 @@ body.addEventListener("click", (event) => {
     showPorfolioPopup(event.target);
     return;
   }
+
   return;
 });
 

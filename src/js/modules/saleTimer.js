@@ -1,6 +1,6 @@
 import { currentOpenPopup, openPopupCallForTimer } from "./popups";
 let timer60sec = 0;
-let endDateOfSale = "2024-02-14T01:00:00.000Z";
+let endDateOfSale = "2025-02-14T01:00:00.000Z";
 const [
   timerNumbersDays,
   timerNumbersHours,

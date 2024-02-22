@@ -14136,8 +14136,9 @@ var _formsData = _interopRequireDefault(require("./formsData"));
 var _forms = _interopRequireDefault(require("./forms"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function messageStatusForm(colorMessage, message) {
-  var messageHtml = "<p style = \"color = ".concat(colorMessage, "\">").concat(message, "</p>");
-  console.log(message);
+  if (message) {
+    var messageHtml = "<p style = \"color = ".concat(colorMessage, "\">").concat(message, "</p>");
+  }
 }
 function validationPopupCalc(balconIconsInCalc, inputs, selectWindowMaterial, glazingSliderLinks) {
   var _balconIconsInCalc$fi;
@@ -14191,7 +14192,6 @@ exports.balconIconsInCalc = void 0;
 exports.calcValidationForm = calcValidationForm;
 exports.checkboxs = void 0;
 exports.switchSlideInCalc = switchSlideInCalc;
-var _formsData = _interopRequireDefault(require("./formsData"));
 var _calcValidation = _interopRequireDefault(require("./calcValidation"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -14236,7 +14236,7 @@ function activeOnlyOneCheckbox(checkbox) {
 function calcValidationForm(popup, glazingSliderLinks) {
   return (0, _calcValidation.default)(popup, glazingSliderLinks, selectWindowMaterial, balconIconsInCalc, inputs, checkboxs);
 }
-},{"./formsData":"js/modules/formsData.js","./calcValidation":"js/modules/calcValidation.js"}],"js/modules/popups.js":[function(require,module,exports) {
+},{"./calcValidation":"js/modules/calcValidation.js"}],"js/modules/popups.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14452,7 +14452,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var timer60sec = 0;
-var endDateOfSale = "2024-02-14T01:00:00.000Z";
+var endDateOfSale = "2025-02-14T01:00:00.000Z";
 var _map = _toConsumableArray(document.querySelectorAll(".numbers1")).map(function (numbersContainer) {
     return numbersContainer.querySelector("span");
   }),
@@ -14501,7 +14501,92 @@ var saleTimer = setInterval(function () {
     timer60sec += 1;
   }
 }, 1000);
-},{"./popups":"js/modules/popups.js"}],"js/index.js":[function(require,module,exports) {
+},{"./popups":"js/modules/popups.js"}],"js/modules/clearFormsFields.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+function clearFormsFields(form) {
+  form.querySelectorAll("input").forEach(function (input) {
+    input.value = "";
+  });
+}
+var _default = exports.default = clearFormsFields;
+},{}],"js/modules/submitForm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _formsData = _interopRequireDefault(require("./formsData"));
+var _clearFormsFields = _interopRequireDefault(require("./clearFormsFields"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function sendData(form) {
+  showStatus(form, "Идет отправка...");
+  fetch("../../server.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8"
+    },
+    body: JSON.stringify(data)
+  }).then(function (response) {
+    showStatus(form, "Мы получили Ваши контактные данные. Ожидайте звонка.");
+    (0, _clearFormsFields.default)(form);
+    return response;
+  }).catch(function (error) {
+    showStatus(form, "Что-то пошло не так");
+    console.error(error);
+  });
+}
+var forms = document.querySelectorAll("form");
+var data = null;
+function savePersonData(form) {
+  _formsData.default.dataPerson.personName = form.querySelector("input[name='user_name']").value;
+  _formsData.default.dataPerson.personTelephoneNumber = form.querySelector("input[name='user_phone']").value;
+  if (_formsData.default.dataPerson.personName && _formsData.default.dataPerson.personTelephoneNumber) {
+    return true;
+  }
+  return false;
+}
+function needToSendCalc() {
+  if (_formsData.default.dataCalc.windowTemperatureType) {
+    return true;
+  }
+  return false;
+}
+function showStatus(form, statusMessage) {
+  var status = form.querySelector(".status");
+  if (status) {
+    status.remove();
+  }
+  var messageHtml = "<p class=\"status\">".concat(statusMessage, "</p>");
+  form.querySelector("button[type='submit']").insertAdjacentHTML("beforebegin", messageHtml);
+}
+function settingSendDada() {
+  needToSendCalc() ? data = _objectSpread(_objectSpread({}, _formsData.default.dataCalc), _formsData.default.dataPerson) : data = _formsData.default.dataPerson;
+}
+function submitForm() {
+  forms.forEach(function (form) {
+    return form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (savePersonData(event.target)) {
+        settingSendDada();
+        sendData(event.target);
+      }
+    });
+  });
+}
+var _default = exports.default = submitForm;
+},{"./formsData":"js/modules/formsData.js","./clearFormsFields":"js/modules/clearFormsFields.js"}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14515,8 +14600,11 @@ var _glazingSlider = require("./modules/glazingSlider");
 var _decorationSlider = require("./modules/decorationSlider");
 var _portfolio = require("./modules/portfolio");
 require("./modules/saleTimer");
+var _submitForm = _interopRequireDefault(require("./modules/submitForm"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 "use strict";
 var body = document.querySelector("body");
+(0, _submitForm.default)();
 body.addEventListener("click", function (event) {
   if ((0, _popups.findPopupOnCloseBtn)(event.target)) {
     if (event.target === _popups.currentOpenPopup.popupToggleBtn) {
@@ -14555,7 +14643,7 @@ body.addEventListener("click", function (event) {
   return;
 });
 var _default = exports.default = body;
-},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js","./modules/glazingSlider":"js/modules/glazingSlider.js","./modules/decorationSlider":"js/modules/decorationSlider.js","./modules/portfolio":"js/modules/portfolio.js","./modules/saleTimer":"js/modules/saleTimer.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./slider":"js/slider.js","./modules/popups":"js/modules/popups.js","./modules/forms":"js/modules/forms.js","./modules/glazingSlider":"js/modules/glazingSlider.js","./modules/decorationSlider":"js/modules/decorationSlider.js","./modules/portfolio":"js/modules/portfolio.js","./modules/saleTimer":"js/modules/saleTimer.js","./modules/submitForm":"js/modules/submitForm.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -14580,7 +14668,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58020" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58091" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

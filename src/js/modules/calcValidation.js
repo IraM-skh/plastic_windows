@@ -2,8 +2,9 @@ import formsData from "./formsData";
 import balconIconsInCalc from "./forms";
 
 function messageStatusForm(colorMessage, message) {
-  const messageHtml = `<p style = "color = ${colorMessage}">${message}</p>`;
-  console.log(message);
+  if (message) {
+    const messageHtml = `<p style = "color = ${colorMessage}">${message}</p>`;
+  }
 }
 
 function validationPopupCalc(
